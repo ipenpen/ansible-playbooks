@@ -1,0 +1,31 @@
+
+#export AWS_ACCESS_KEY_ID=xxx
+#export AWS_SECRET_ACCESS_KEY=yyy
+#export ANSIBLE_HOST_KEY_CHECKING = False
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - role: security_group
+    - role: ec2
+  vars:
+    ami_image: ami-383c1956
+    key_name: CloudConductor
+    group_name: "ansible_ec2"
+    instance_type: "t2.micro"
+    device_name: "/dev/xvda"
+    device_type: "gp2"
+    volume_size: 8
+  tags: create_instance
+  
+- hosts: host_ansible_ec2
+  remote_user: ec2-user
+  become: yes
+  gather_facts: no
+  roles:
+    - role: wordpress
+  vars_prompt:
+    - name: "dbpassword"
+      prompt: "WordpressのDBのパスワードを入力してください(default:password)。"
+      default: "password"

@@ -1,0 +1,3 @@
+#WordpressのDBに関する情報
+dbname: wordpress
+dbuser: admin
