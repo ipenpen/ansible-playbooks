@@ -1,0 +1,22 @@
+---
+#export AWS_ACCESS_KEY='xxx'
+#export AWS_SECRET_KEY='yyy'
+
+#ec2_access_key: "xxx"
+#ec2_secret_key: "yyy"
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  
+  tasks:
+    - name: provision a set of instances
+      ec2:
+        key_name: CloudConductor
+        group: Ansible
+        instance_type: t2.micro
+        image: ami-383c1956
+        region: ap-northeast-1
+        wait: true
+      register: ec2
+  

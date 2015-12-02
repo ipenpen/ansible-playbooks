@@ -1,0 +1,42 @@
+#link wordpress to database
+- name: config wordpress
+  command: "{{item}}"
+  with_items:
+    - cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php 
+    - sed -i 's/database_name_here/{{dbname}}/g' /var/www/html/wordpress/wp-config.php 
+    - sed -i 's/username_here/{{dbuser}}/g' /var/www/html/wordpress/wp-config.php 
+    - sed -i 's/password_here/{{dbpassword}}/g' /var/www/html/wordpress/wp-config.php
+
+#create database and user
+- name: generate setup file
+  template: src=setup.mysql dest=/var/www/html/setup.mysql owner=root group=root mode=777
+  tags: wordpress
+
+- name: set mysql root password
+  command: "{{item}}"
+  with_items:
+    - mysqladmin -u root password rootpassword
+  ignore_errors: yes
+
+- name: run setup sql for creating database and user
+  command: "{{item}}"
+  with_items:
+    - sudo mysql -u root --password=rootpassword < /var/www/html/setup.mysql
+
+
+
+
+
+
+
+#- name: Create database
+#  mysql_db: db={{dbname}} state=present encoding=utf8
+#  tags: mysqld
+
+#- name: Create database user
+#  mysql_user: >
+#    name={{dbuser}}
+#    password="{{dbpassword}}"
+#    priv={{dbname}}.*:ALL
+#    state=present
+#  tags: mysqld
