@@ -1,0 +1,4 @@
+CREATE DATABASE if not exists {{dbname}};
+CREATE USER {{dbuser}}@localhost IDENTIFIED BY '{{dbpassword}}';
+GRANT ALL ON {{dbname}}.* TO {{dbuser}}@localhost;
+FLUSH PRIVILEGES;

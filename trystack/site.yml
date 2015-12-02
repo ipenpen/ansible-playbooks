@@ -1,0 +1,23 @@
+#export ANSIBLE_HOST_KEY_CHECKING = False
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - role: trystack
+  vars:
+    login_username: "facebook130865593938526"
+    login_password: "dsA86c3hYAKJYuEp"
+    login_tenant_name: "facebook130865593938526"
+  tags: create_instance
+  
+- hosts: host_ansible_trystack #TODO: need edit later
+  remote_user: ec2-user
+  become: yes
+  gather_facts: no
+  roles:
+    - role: wordpress
+  vars_prompt:
+    - name: "dbpassword"
+      prompt: "WordpressのDBのパスワードを入力してください(default:password)。"
+      default: "password"

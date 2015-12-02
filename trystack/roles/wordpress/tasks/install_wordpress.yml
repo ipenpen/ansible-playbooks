@@ -1,0 +1,28 @@
+---
+- name: wordpressに関するpackagesをインストールする
+  yum: name={{item}} state=installed
+  with_items:
+    - php
+    - php-mysql
+    - mysql-devel
+    - mysql
+    - mysql-server
+    - mysql-libs
+    - httpd
+  tags: install_wordpress
+
+- name: be sure httpd is running and enabled
+  service: name=httpd state=started enabled=yes
+  tags: httpd
+
+- name: be sure mysqld is running and enabled
+  service: name=mysqld state=started enabled=yes
+  tags: mysqld
+
+- name: wordpressの最新版を取得しておく
+  get_url: url=http://wordpress.org/latest.tar.gz dest=/var/www/html/latest.tar.gz
+  tags: install_wordpress
+
+- name: extract wordpress tar ball
+  unarchive: src=/var/www/html/latest.tar.gz dest=/var/www/html copy=no
+  tags: install_wordpress

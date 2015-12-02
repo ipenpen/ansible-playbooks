@@ -1,0 +1,3 @@
+#Wordpressのタスク
+- include: install_wordpress.yml
+- include: configure_wordpress.yml

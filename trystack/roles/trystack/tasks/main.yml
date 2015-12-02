@@ -1,0 +1,17 @@
+---
+- name: create an instance
+  nova_compute:
+    state: present
+    login_username: "{{ login_username }}"
+    login_password: "{{ login_password }}"
+    login_tenant_name: "{{ login_tenant_name }}"
+    name: ansible-trystack
+    auth_url: "http://128.136.179.2:5000/v2.0"
+    image_id: "194b15f1-b8cb-4c67-90df-19771e85e03d"
+    key_name: CloudConductor
+    wait_for: 200
+    flavor_id: 2
+    security_groups: default
+ 
+#- name: waiting until accessable with ssh
+#  pause: minutes=5
